@@ -169,6 +169,11 @@ button {
     visibility: visible;
 }
 
+#buttons {
+    display: flex;
+    justify-content: space-evenly;
+}
+
 button:disabled {
     background-color: #90c9c5;
 }
@@ -177,7 +182,12 @@ button:disabled {
     margin: auto;
     padding: 15px;
 
-    border: 1px solid #3a8895;
+    border: 2px solid #3a8895;
+}
+
+#status {
+    display: flex;
+    justify-content: space-between;
 }
 
 

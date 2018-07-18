@@ -77,8 +77,27 @@ var init = {
 };
 
 var game = {
+	// get full name of choice
+	getFull: function(choice) {
+		var full = "START";
+		if (choice == 'r') {
+			full = "ROCK";
+		}
+		else if (choice == 'p') {
+			full = "PAPER";
+		}
+		else if (choice == 's') {
+			full = "SCISSORS";
+		}
+		else {
+			full = "ERROR!";
+		}
+
+		return full;
+	},
+
+	// if we are first, we are player 1; else, player 2
 	assignPlayer: function() {
-		// if we are first, we are player 1; else, player 2
 		var ref = init.ref;
 
 		if (data.ready1 == false) {
@@ -115,9 +134,10 @@ var game = {
 		}
 	},
 
-	// GOTTA BE A WAY TO COMBINE THESE... ALSO CANNOT MOVE FORWARD AS-IS
+	// 
 	doRPS: function() {
 		console.log("Playing...");
+
 		// am I player 1?
 		if (data.player == 1) {
 			// have I moved yet?
@@ -137,11 +157,15 @@ var game = {
 				// set listener for buttons, update DB accordingly
 				$(".control_button").one("click", function() {
 					var choice = $(this).data("choice");
+					var full = game.getFull(choice);
+
+					$("#choice_us").html(`<h4>You chose ${full}</h4>`);
+					$(".control_button").prop("disabled", true);
+
 					init.ref.update({
 						move1: choice
 					});
 
-					$(".control_button").prop("disabled", true);
 					$(".control_button").off("click");
 				});
 			}
@@ -169,11 +193,15 @@ var game = {
 				// set listener for buttons, update DB accordingly
 				$(".control_button").on("click", function() {
 					var choice = $(this).data("choice");
+					var full = game.getFull(choice);
+
+					$("#choice_us").html(`<h4>You chose ${full}</h4>`);
+					$(".control_button").prop("disabled", true);
+
 					init.ref.update({
 						move2: choice
 					});
 
-					$(".control_button").prop("disabled", true);
 					$(".control_button").off("click");
 				});
 			}
@@ -187,21 +215,32 @@ var game = {
 	// score based on player choices
 	doScore: function() {
 		console.log("Scoring...")
-		$("#app_alert").html("<h2>Showdown:</h2>");
+		var won = false;
+
+		$("#app_alert").html("<h2>Showdown!</h2>");
 
 		// determine if we won depending on which user we are
 		if (data.player == 1) {
+			console.log("p1");
 			var our_guess = data.move1;
 			var their_guess = data.move2;
+			var their_full = this.getFull(their_guess);
+
+			$("#choice_them").html(`<h4>Player 2 chose ${their_full}</h4>`);
 		}
 		else {
+			console.log("p2");
 			var our_guess = data.move2;
 			var their_guess = data.move1;
+			var their_full = this.getFull(their_guess);
+
+			$("#choice_them").html(`<h4>Player 1 chose ${their_full}</h4>`);
 		}
 
 		if (our_guess == their_guess)
 		{
 			data.ties++;
+			$("#score").html("<h4>TIE!</h4>");
 		}
 		else
 		{
@@ -210,16 +249,19 @@ var game = {
 			{
 				data.wins++;
 				console.log("win");
+				$("#score").html("<h4>WIN!</h4>");
 			}
 			else if (our_guess == "p" && their_guess == "r")
 			{
 				data.wins++;
 				console.log("win");
+				$("#score").html("<h4>WIN!</h4>");
 			}
 			else if (our_guess == "s" && their_guess == "p")
 			{
 				data.wins++;
 				console.log("win");
+				$("#score").html("<h4>WIN!</h4>");
 			}
 
 			// user losses
@@ -227,20 +269,45 @@ var game = {
 			{
 				data.losses++;
 				console.log("lose");
+				$("#score").html("<h4>LOSE!</h4>");
 			}
 			else if (our_guess == "p" && their_guess == "s")
 			{
 				data.losses++;
 				console.log("lose");
+				$("#score").html("<h4>LOSE!</h4>");
 			}
 			else if (our_guess == "s" && their_guess == "r")
 			{
 				data.losses++;
 				console.log("lose");
+				$("#score").html("<h4>LOSE!</h4>");
 			}
 		}
 
 		// if total score not greater than max || tied, keep playing
+		// IMPLEMENT MAX SCORE
+		$("#status_wins").empty().html(`<h4>wins: ${data.wins}</h4>`);
+		$("#status_losses").empty().html(`<h4>losses: ${data.losses}</h4>`);
+		$("#status_ties").empty().html(`<h4>ties: ${data.ties}</h4>`);
+
+
+		setTimeout(function() {
+			console.log("Playing again...");
+			
+			$("#choice_us").empty()
+			$("#choice_them").empty()
+			$("#score").empty()
+
+			// only one player needs to reset remote vars
+			var ref = init.ref
+			if (data.player == 1) {
+				ref.set({
+					move1: -1,
+					move2: -1
+				});
+			}
+		}, 5000);
 	},
 
 	// interpret game state based on sync'd vars
@@ -256,6 +323,7 @@ var game = {
 			data.player = -1;
 			data.wins = 0;
 			data.losses = 0;
+			data.ties = 0;
 
 			ref.update({
 				reset: false
