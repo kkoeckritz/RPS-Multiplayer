@@ -137,7 +137,7 @@ button {
 }
 
 
-/* for GifTastic page ____________________ */
+/* for MultiRPS page ____________________ */
 @font-face {
     font-family: textile;
     src: url("../fonts/Textile.ttf");
@@ -169,87 +169,15 @@ button {
     visibility: visible;
 }
 
-#app_add_topic>form {
-    display: inline;
+button:disabled {
+    background-color: #90c9c5;
 }
 
-#add_topic_text {
-    outline-color: #3a8895; 
-}
+#app_control {
+    margin: auto;
+    padding: 15px;
 
-#add_topic_text:focus {
-    outline-color: #3a8895;
-    box-shadow: none;
-}
-
-#add_topic_button {
-    background-color: #3a8895;
-}
-
-#save_topics,
-#reset_topics {
-    background-color: #3a8895;
-}
-
-.control_buttons {
-    padding: 3px;
-
-    font-size: 10pt;
-}
-
-#button_selected {
-    background-color: #3a8895;
-    outline: none;
-}
-
-#app_wiki {
-    display: none;
-}
-
-#wiki_logo {
-    position: relative;
-    width: 60px;
-    /* bottom: -15px;
-    left: -5px; */
-    top: -36px;
-    right: -95.5%;
-    z-index: 1;
-}
-
-#wiki_text {
-    padding: 20px;
-
-    color: white;
-    background-color: #3a8895;
-    font-family: 'Arial', 'Helvetica Neue', Helvetica, sans-serif;
-    font-size: 12pt;
-}
-
-#wiki_more {
-    position: relative;
-    top: -15px;
-    right: -88.6%;
-
-    font-size: 10pt;
-    color: white;
-    font-family: sans-serif;
-}
-
-#app_gifs {
-    display: flex;
-    flex-wrap: wrap;
-}
-
-.topic_div {
-    margin-bottom: 15px;
-}
-
-.topic_rating {
-    font-size: 10pt;
-}
-
-.topic_gif {
-    width: 75%;
+    border: 1px solid #3a8895;
 }
 
 

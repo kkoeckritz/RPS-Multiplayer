@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>GifTastic</title>
+    <title>RPS PVP</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <link rel="stylesheet" type="text/css" media="screen" href="./assets/css/reset.css">
@@ -30,8 +30,19 @@
             <h1>Rock Paper Scissors: PVP!</h1>
             <hr>
             <div class="app">
-                <div id="app_alert"></div>
-                <div id="app_control"></div>
+                <div id="app_alert">Loading...</div>
+                <br>
+                <div id="app_control">
+                    <div id="status">
+                        <div id="status_player"></div>
+                        <div id="status_choice"></div>
+                        <div id="status_score"></div>
+                    </div>
+                    <br>
+                    <button id="button_R" data-choice="r" class="control_button" disabled>ROCK</button>
+                    <button id="button_P" data-choice="p" class="control_button" disabled>PAPER</button>
+                    <button id="button_S" data-choice="s" class="control_button" disabled>SCISSORS</button>
+                </div>
             </div>
         </div>
     </div>
