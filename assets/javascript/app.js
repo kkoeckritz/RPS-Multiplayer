@@ -44,7 +44,13 @@ var init = {
 			var chat_player = new_chat.player;
 			var chat_content = new_chat.content;
 
-			$("#chat_log").append(`Player ${chat_player}: ${chat_content}\n`);
+			// hide chat content from "extra" users
+			if (data.player != -1) {
+				$("#chat_log").append(`Player ${chat_player}: ${chat_content}\n`);
+			}
+			else {
+				$("#chat_log").prop("disabled", true);
+			}
 
 			// scroll chat with added text
 			var scroll_height = $("#chat_log")[0].scrollHeight - $("#chat_log")[0].clientHeight;
@@ -162,6 +168,8 @@ var game = {
 
 			// cancel disconnect action so game state isn't ruined for other players
 			init.ref.onDisconnect().cancel();
+			init.ref_chat.onDisconnect().cancel();
+
 		}
 	},
 
