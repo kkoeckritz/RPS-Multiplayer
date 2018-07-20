@@ -161,31 +161,6 @@ var game = {
 		}
 	},
 
-	// reset local vars, fields, etc
-	doReset: function() {
-		var ref = init.ref;
-
-		console.log("someone disconnected");
-		$("#game_alert").html("<h2>Someone disconnected</h2>");
-		$("#status_wins").empty();
-		$("#status_losses").empty();
-		$("#status_ties").empty();
-		$("#chat_text").prop("disabled", true);
-		$("#chat_submit").prop("disabled", true);
-
-		data.player = -1;
-		data.wins = 0;
-		data.losses = 0;
-		data.ties = 0;
-
-		ref.update({
-			reset: false
-		});
-
-		// clear chat log
-		$("#chat_log").empty();
-	},
-
 	// allow users to make their moves
 	doRPS: function() {
 		console.log("Playing...");
@@ -365,10 +340,29 @@ var game = {
 	// interpret game state based on sync'd vars
 	playGame: function() {
 		console.log("go");
+		var ref = init.ref;
 
 		// if someone disconnected, reset game state
 		if (data.reset == true) {
-			game.doReset();
+			console.log("someone disconnected");
+			$("#game_alert").html("<h2>Someone disconnected</h2>");
+			$("#status_wins").empty();
+			$("#status_losses").empty();
+			$("#status_ties").empty();
+			$("#chat_text").prop("disabled", true);
+			$("#chat_submit").prop("disabled", true);
+
+			data.player = -1;
+			data.wins = 0;
+			data.losses = 0;
+			data.ties = 0;
+
+			ref.update({
+				reset: false
+			});
+
+			// clear chat log
+			$("#chat_log").empty();
 		}
 		else {
 			// which player are we?
