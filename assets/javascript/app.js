@@ -44,7 +44,7 @@ var init = {
 			var chat_player = new_chat.player;
 			var chat_content = new_chat.content;
 
-			$("#chat_log").append(`Player ${chat_player}: ${chat_content}\n\n`);
+			$("#chat_log").append(`Player ${chat_player}: ${chat_content}\n`);
 		});
 
 		$("#chat_submit").on("click", function() {
@@ -139,8 +139,6 @@ var game = {
 			});
 
 			$("#game_alert").html("<h2>Waiting for Player 2...</h2>");
-			$("#chat_text").prop("disabled", false);
-			$("#chat_submit").prop("disabled", false);
 		}
 		else if (data.ready2 == false) {
 			console.log("we are player 2");
@@ -152,9 +150,6 @@ var game = {
 			ref.update({
 				ready2: true,
 			});
-
-			$("#chat_text").prop("disabled", false);
-			$("#chat_submit").prop("disabled", false);
 		}
 		else {
 			// game is full
@@ -166,7 +161,32 @@ var game = {
 		}
 	},
 
-	// 
+	// reset local vars, fields, etc
+	doReset: function() {
+		var ref = init.ref;
+
+		console.log("someone disconnected");
+		$("#game_alert").html("<h2>Someone disconnected</h2>");
+		$("#status_wins").empty();
+		$("#status_losses").empty();
+		$("#status_ties").empty();
+		$("#chat_text").prop("disabled", true);
+		$("#chat_submit").prop("disabled", true);
+
+		data.player = -1;
+		data.wins = 0;
+		data.losses = 0;
+		data.ties = 0;
+
+		ref.update({
+			reset: false
+		});
+
+		// clear chat log
+		$("#chat_log").empty();
+	},
+
+	// allow users to make their moves
 	doRPS: function() {
 		console.log("Playing...");
 
@@ -345,27 +365,10 @@ var game = {
 	// interpret game state based on sync'd vars
 	playGame: function() {
 		console.log("go");
-		var ref = init.ref;
 
 		// if someone disconnected, reset game state
 		if (data.reset == true) {
-			console.log("someone disconnected");
-			$("#game_alert").html("<h2>Someone disconnected</h2>");
-			$("#status_wins").empty();
-			$("#status_losses").empty();
-			$("#status_ties").empty();
-
-			data.player = -1;
-			data.wins = 0;
-			data.losses = 0;
-			data.ties = 0;
-
-			ref.update({
-				reset: false
-			});
-
-			// clear chat log
-			$("#chat_log").empty();
+			game.doReset();
 		}
 		else {
 			// which player are we?
@@ -376,6 +379,9 @@ var game = {
 			}
 			// start actual game
 			else {
+				$("#chat_text").prop("disabled", false);
+				$("#chat_submit").prop("disabled", false);
+
 				if (data.move1 == -1 || data.move2 == -1) {
 					console.log("Let's play.");
 					game.doRPS();

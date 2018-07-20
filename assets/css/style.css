@@ -180,6 +180,9 @@ button:disabled {
 #chat_log {
     width: 100%;
     box-sizing: border-box;
+    resize: none;
+
+    line-height: 15pt;
 }
 
 #chat_log:focus {
