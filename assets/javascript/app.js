@@ -37,19 +37,16 @@ var init = {
 		init.ref_chat = init.db.ref("chat/")
 	},
 
-	// set up chat sending/receiving
+	// set up chat receiving, sending
 	setChat: function() {
 		init.ref_chat.on("child_added", function(snapshot) {
 			var new_chat = snapshot.val();
 			var chat_player = new_chat.player;
 			var chat_content = new_chat.content;
 
-			// hide chat content from "extra" users
+			// hide chat content from extraneous players
 			if (data.player != -1) {
 				$("#chat_log").append(`Player ${chat_player}: ${chat_content}\n`);
-			}
-			else {
-				$("#chat_log").prop("disabled", true);
 			}
 
 			// scroll chat with added text
@@ -60,10 +57,14 @@ var init = {
 		$("#chat_submit").on("click", function() {
 			event.preventDefault();
 
-			init.ref_chat.push({
-				player: data.player,
-				content: $("#chat_text").val().trim()
-			});
+			// prevent submitting empty strings
+			var chat_text = $("#chat_text").val().trim();
+			if (chat_text != "") {
+				init.ref_chat.push({
+					player: data.player,
+					content: chat_text
+				});
+			}
 
 			$("#chat_text").val("");
 		});
