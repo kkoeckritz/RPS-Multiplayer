@@ -168,7 +168,7 @@ button:disabled {
 
 /* _________________ chat */
 #chat {
-    width: 50%;
+    width: 100%;
 }
 
 #chat_content {
@@ -181,8 +181,14 @@ button:disabled {
     width: 100%;
     box-sizing: border-box;
     resize: none;
-
     line-height: 15pt;
+
+    overflow: auto;
+    border: none;
+}
+
+#chat_log::-webkit-scrollbar {
+    display: none;
 }
 
 #chat_log:focus {
@@ -195,7 +201,7 @@ button:disabled {
 }
 
 #chat_text {
-    width: 83%;
+    width: 84%;
 }
 
 #chat_submit {

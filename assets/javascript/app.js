@@ -45,6 +45,10 @@ var init = {
 			var chat_content = new_chat.content;
 
 			$("#chat_log").append(`Player ${chat_player}: ${chat_content}\n`);
+
+			// scroll chat with added text
+			var scroll_height = $("#chat_log")[0].scrollHeight - $("#chat_log")[0].clientHeight;
+			$("#chat_log").scrollTop(scroll_height);
 		});
 
 		$("#chat_submit").on("click", function() {
@@ -396,23 +400,3 @@ $().ready(function() {
 	init.setReset();
 	init.startGame();
 });
-
-
-/*
-	RESTRUCTURE DB:
-		/
-			data/
-				ready1
-				ready2
-				move1
-				move2
-				reset
-			chat/
-				[random_push_id]/
-					player
-					message
-				(etc)
-
-	- onDisconnect() resets data vars, clears chat log
-
-*/
