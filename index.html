@@ -29,28 +29,45 @@
         <div class="content">
             <h1>Rock Paper Scissors: PVP!</h1>
             <hr>
-            <div class="app">
-                <div id="app_alert">Loading...</div>
-                <br>
-                <div id="app_control">
-                    <div id="status">
-                        <div id="status_player"></div>
-                        <div id="status_wins"></div>
-                        <div id="status_losses"></div>
-                        <div id="status_ties"></div>
+            <div id="app">
+                <div class="game">
+                    <div id="game_alert">
+                        <h2>Loading...</h2>
                     </div>
                     <br>
-                    <div id="buttons">
-                        <button id="button_R" data-choice="r" class="control_button" disabled>ROCK</button>
-                        <button id="button_P" data-choice="p" class="control_button" disabled>PAPER</button>
-                        <button id="button_S" data-choice="s" class="control_button" disabled>SCISSORS</button>
+                    <div id="game_control">
+                        <div id="status">
+                            <div id="status_player"></div>
+                            <div id="status_wins"></div>
+                            <div id="status_losses"></div>
+                            <div id="status_ties"></div>
+                        </div>
+                        <br>
+                        <div id="buttons">
+                            <button id="button_R" data-choice="r" class="control_button" disabled>ROCK</button>
+                            <button id="button_P" data-choice="p" class="control_button" disabled>PAPER</button>
+                            <button id="button_S" data-choice="s" class="control_button" disabled>SCISSORS</button>
+                        </div>
                     </div>
-                </div>
-                <br>
-                <div id="app_choice">
-                    <div id="choice_us"></div>
-                    <div id="choice_them"></div>
-                    <div id="score"></div>
+                    <br>
+                    <div id="game_choice">
+                        <div id="choice_us"></div>
+                        <div id="choice_them"></div>
+                        <div id="score"></div>
+                    </div>
+                </div>                
+                <div id="chat">
+                    <div id="chat_head">
+                        <h2>Chat</h2>
+                    </div>
+                    <br>
+                    <div id="chat_content">
+                        <textarea name="chat_log" id="chat_log" rows="20" readonly></textarea>
+                        <form id="chat_form">
+                            <input type="text" name="chat_text" id="chat_text" disabled>
+                            <button type="submit" id="chat_submit" disabled>✔</button>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>

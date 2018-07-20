@@ -138,35 +138,11 @@ button {
 
 
 /* for MultiRPS page ____________________ */
-@font-face {
-    font-family: textile;
-    src: url("../fonts/Textile.ttf");
-}
 
-.tooltip {
-    position: relative;
-    display: inline-block;
-}
+/* _________________ game */
 
-.tooltip .tooltiptext {
-    visibility: hidden;
-    width: 120px;
-    padding: 5px 5px;
-    text-align: center;
-
-    position: absolute;
-    z-index: 1;
-    bottom: 110%;
-    left: 50%; 
-    margin-left: -60px;
-    border-radius: 15px;    
-
-    color: #fff;
-    background-color: #4aaaa5;
-}
-
-.tooltip:hover .tooltiptext {
-    visibility: visible;
+#game {
+    width: 70%;
 }
 
 #buttons {
@@ -178,7 +154,7 @@ button:disabled {
     background-color: #90c9c5;
 }
 
-#app_control {
+#game_control {
     margin: auto;
     padding: 15px;
 
@@ -188,6 +164,42 @@ button:disabled {
 #status {
     display: flex;
     justify-content: space-between;
+}
+
+/* _________________ chat */
+#chat {
+    width: 50%;
+}
+
+#chat_content {
+    padding: 15px 15px 15px 15px;
+    
+    border: 2px solid #3a8895;
+}
+
+#chat_log {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+#chat_log:focus {
+    outline: none;
+}
+
+#chat_form {
+    display: flex;
+    justify-content: space-between;
+}
+
+#chat_text {
+    width: 83%;
+}
+
+#chat_submit {
+    padding: 3px 0;
+    width: 15%;
+
+    font-size: 10pt;
 }
 
 

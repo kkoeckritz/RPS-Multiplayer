@@ -17,6 +17,7 @@ var data = {
 var init = {
 	db: null,
 	ref: null,
+	ref_chat: null,
 	run_next: true,
 
 	// Initialize Firebase
@@ -32,7 +33,30 @@ var init = {
 
 		firebase.initializeApp(config);
 		init.db = firebase.database();
-		init.ref = init.db.ref();
+		init.ref = init.db.ref("data/");
+		init.ref_chat = init.db.ref("chat/")
+	},
+
+	// set up chat sending/receiving
+	setChat: function() {
+		init.ref_chat.on("child_added", function(snapshot) {
+			var new_chat = snapshot.val();
+			var chat_player = new_chat.player;
+			var chat_content = new_chat.content;
+
+			$("#chat_log").append(`Player ${chat_player}: ${chat_content}\n\n`);
+		});
+
+		$("#chat_submit").on("click", function() {
+			event.preventDefault();
+
+			init.ref_chat.push({
+				player: data.player,
+				content: $("#chat_text").val().trim()
+			});
+
+			$("#chat_text").val("");
+		});
 	},
 
 	// reset remote vars if a connection is lost
@@ -47,6 +71,9 @@ var init = {
 			reset: true
 			// full: false
 		});
+
+		// clear chat as well
+		init.ref_chat.onDisconnect().set({});
 	},
 
 	// listen for changes in remote; trigger game events as needed
@@ -111,7 +138,9 @@ var game = {
 				ready1: true
 			});
 
-			$("#app_alert").html("<h2>Waiting for Player 2</h2>");
+			$("#game_alert").html("<h2>Waiting for Player 2...</h2>");
+			$("#chat_text").prop("disabled", false);
+			$("#chat_submit").prop("disabled", false);
 		}
 		else if (data.ready2 == false) {
 			console.log("we are player 2");
@@ -123,11 +152,14 @@ var game = {
 			ref.update({
 				ready2: true,
 			});
+
+			$("#chat_text").prop("disabled", false);
+			$("#chat_submit").prop("disabled", false);
 		}
 		else {
 			// game is full
 			console.log("That's too many people, man!")
-			$("#app_alert").html("<h2>Game in progress.</h2><h3>Please wait for players to finish.</h3>");
+			$("#game_alert").html("<h2>Game in progress.</h2><h3>Please wait for players to finish.</h3>");
 
 			// cancel disconnect action so game state isn't ruined for other players
 			init.ref.onDisconnect().cancel();
@@ -146,10 +178,10 @@ var game = {
 				// has player 2 already moved?
 				console.log("I need to move.");
 				if (data.move2 != -1) {
-					$("#app_alert").html("<h2>Hurry up!</h2>");
+					$("#game_alert").html("<h2>Hurry up!</h2>");
 				}
 				else {
-					$("#app_alert").html("<h2>Make your move!</h2>");
+					$("#game_alert").html("<h2>Make your move!</h2>");
 				}
 				
 				$(".control_button").prop("disabled", false);
@@ -171,7 +203,7 @@ var game = {
 			}
 			else {
 				console.log("I am waiting on Player 2");
-				$("#app_alert").html("<h2>Player 2 is taking their time...</h2>");
+				$("#game_alert").html("<h2>Player 2 is taking their time...</h2>");
 			}
 		}
 		// am I player 2?
@@ -182,10 +214,10 @@ var game = {
 				// has player 2 already moved?
 				console.log("I need to move.");
 				if (data.move1 != -1) {
-					$("#app_alert").html("<h2>Hurry up!</h2>");
+					$("#game_alert").html("<h2>Hurry up!</h2>");
 				}
 				else {
-					$("#app_alert").html("<h2>Make your move!</h2>");
+					$("#game_alert").html("<h2>Make your move!</h2>");
 				}
 
 				$(".control_button").prop("disabled", false);
@@ -207,7 +239,7 @@ var game = {
 			}
 			else {
 				console.log("I am waiting on Player 1.");
-				$("#app_alert").html("<h2>Player 1 is taking their time...</h2>");
+				$("#game_alert").html("<h2>Player 1 is taking their time...</h2>");
 			}
 		}
 	},
@@ -217,7 +249,7 @@ var game = {
 		console.log("Scoring...")
 		var won = false;
 
-		$("#app_alert").html("<h2>Showdown!</h2>");
+		$("#game_alert").html("<h2>Showdown!</h2>");
 
 		// determine if we won depending on which user we are
 		if (data.player == 1) {
@@ -318,7 +350,10 @@ var game = {
 		// if someone disconnected, reset game state
 		if (data.reset == true) {
 			console.log("someone disconnected");
-			$("#app_alert").html("<h2>Someone disconnected</h2>");
+			$("#game_alert").html("<h2>Someone disconnected</h2>");
+			$("#status_wins").empty();
+			$("#status_losses").empty();
+			$("#status_ties").empty();
 
 			data.player = -1;
 			data.wins = 0;
@@ -328,6 +363,9 @@ var game = {
 			ref.update({
 				reset: false
 			});
+
+			// clear chat log
+			$("#chat_log").empty();
 		}
 		else {
 			// which player are we?
@@ -354,8 +392,27 @@ var game = {
 
 $().ready(function() {
 	init.linkDB();
+	init.setChat();
 	init.setReset();
 	init.startGame();
 });
 
 
+/*
+	RESTRUCTURE DB:
+		/
+			data/
+				ready1
+				ready2
+				move1
+				move2
+				reset
+			chat/
+				[random_push_id]/
+					player
+					message
+				(etc)
+
+	- onDisconnect() resets data vars, clears chat log
+
+*/
